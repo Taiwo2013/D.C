@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>flexbox calculator</title>
+    <style>
+        body{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(45deg, #1e3c72, #2a5298);
+            flex-direction: column;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+        .calculator{
+            display: flex;
+            flex-direction: column;
+            background: #222;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.3);
+            max-width: 320px;
+            width: 100%;
+        }
+        .display{
+            width: 90%;
+            height: 60px;
+            font-size: 28px;
+            border: none;
+            background: #333;
+            text-align: right;
+            padding: 15px;
+            color: white;
+            border-radius: 10px;
+            outline: none;
+            margin-bottom: 15px;
+        }
+        .history{
+            width: 100%;
+            max-height: 100px;
+            overflow-y: auto;
+            font-size: 14px;
+            color: lightgray;
+            background: #111;
+            padding: 10px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
+        .buttons{
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        button{
+            flex: 1 1 22%;
+            padding: 15px;
+            font-weight: bold;
+            font-size: 20px;
+            background: #444;
+            border: none;
+            color: white;
+            cursor: pointer;
+            border-radius: 10px;
+            transition: transform 0.1s ease-in-out, background 0.2s;
+        }
+        button:active{
+            transform: scale(0.95);
+        }
+        button:hover{
+            background: #666;
+        }
+        .operator{
+            background: orange;
+            color: white;
+        }
+        .operator:hover{
+            background: darkorange;
+        }
+        .equals{
+            background: #08d;
+            color: white;
+            flex: 1 1 48%;
+        }    
+        .equals:hover{
+            background: #06b;
+        }
+        .clear{
+            background: red;
+            color: white;
+        }
+        .clear:hover{
+            background: darkred ;
+        }
+        .zero{
+            flex: 1 1 48%;
+        }
+        @media (max-width: 400px){
+            .calculator{
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="calculator">
+        <div class="history" id="history"></div>
+        <input type="text" class="display" id="display" readonly>
+        <div class="buttons">
+            <button onclick="clearDisplay()">C</button>
+            <button onclick="appendToDisplay('/')">/</button>
+            <button onclick="appendToDisplay('*')">*</button>
+            <button onclick="backspace()">DEL</button>
+
+            <button onclick="appendToDisplay('7')">7</button>
+            <button onclick="appendToDisplay('8')">8</button>
+            <button onclick="appendToDisplay('9')">9</button>
+            <button class="operator" onclick="appendToDisplay('-')">-</button>
+
+            <button onclick="appendToDisplay('4')">4</button>
+            <button onclick="appendToDisplay('5')">5</button>
+            <button onclick="appendToDisplay('6')">6</button>
+            <button class="operator" onclick="appendToDisplay('+')">+</button>
+
+            <button onclick="appendToDisplay('1')">1</button>
+            <button onclick="appendToDisplay('2')">2</button>
+            <button onclick="appendToDisplay('3')">3</button>
+            <button class="equals" onclick="calculateResult()">=</button>
+
+
+            <button class="zero" onclick="appendToDisplay('0')">0</button>
+            <button onclick="appendToDisplay('.')">.</button>
+        </div>
+    </div>
+    <script>
+        function appendToDisplay(value){
+            document.getElementById("display").value += value;
+        }
+        function clearDisplay(){
+            document.getElementById("display").value = "";
+        }
+        function backspace(){
+            let display = document.getElementById("display");
+            display.value = display.value.slice(0, -1);
+        }
+        function calculateResult(){
+             try{
+                const display = document.getElementById("display");
+                const expression = display.value;
+                const result = eval(expression);
+                display.value = result;
+                addToHistory(expression + " = " + result);
+             }
+             catch(error){
+                 document.getElementById("display").value = "error";
+
+             }
+        }
+        function addToHistory(entry){
+            let history = document.getElementById("history");
+            let newEntry = document.createElement("div");
+            newEntry.textContent = entry;
+            history.appendChild(newEntry);
+            
+        }   
+
+    </script>
+</body>
+</html>
